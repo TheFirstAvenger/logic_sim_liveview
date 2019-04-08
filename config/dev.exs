@@ -52,7 +52,8 @@ config :logic_sim_liveview, LogicSimLiveviewWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/logic_sim_liveview_web/{live,views}/.*(ex)$",
-      ~r"lib/logic_sim_liveview_web/templates/.*(eex)$"
+      ~r"lib/logic_sim_liveview_web/templates/.*(eex)$",
+      ~r"lib/demo_web/live/.*(ex)$"
     ]
   ]
 

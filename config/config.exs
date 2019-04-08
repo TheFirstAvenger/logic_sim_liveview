@@ -15,7 +15,10 @@ config :logic_sim_liveview, LogicSimLiveviewWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "AxGntLOTrSCydS4EZp8NiDF8USNaLMpAoprW892j2yVWoDUZIB0eXoLbLb0sB/PU",
   render_errors: [view: LogicSimLiveviewWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: LogicSimLiveview.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: LogicSimLiveview.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+    signing_salt: "NancP11ODVS0pbZhrl/crArW0TwCrdlC"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -23,7 +26,9 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config :phoenix,
+  json_library: Jason,
+  template_engines: [leex: Phoenix.LiveView.Engine]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -1,6 +1,8 @@
 defmodule LogicSimLiveviewWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :logic_sim_liveview
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", LogicSimLiveviewWeb.UserSocket,
     websocket: true,
     longpoll: false
