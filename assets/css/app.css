@@ -1,3 +1,91 @@
 /* This file is for your main application css. */
 
-@import "./phoenix.css";
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/font-awesome/css/font-awesome.css";
+
+.container{
+  margin:0 auto;
+  max-width: 800px;
+  padding:0 2.0rem;
+  position:relative;
+  width:100%
+}
+
+.main-div {
+  position: relative;
+  background-color: aqua;
+  z-index: 1;
+}
+
+.node-div {
+  position: absolute; 
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.node-inputs-outputs-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.node-input-output-true {
+  background-color: red;
+}
+
+.node-input-output-false {
+  background-color: white;
+}
+
+.selection-mode-div {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+  opacity: .6;
+  z-index: 4;
+}
+
+.connection-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2
+}
+
+.connection-line-on {
+  stroke: rgb(255,0,0);
+  stroke-width: 2
+}
+
+.connection-line-off {
+  stroke: rgb(255,255,255);
+  stroke-width: 2
+}
+
+.select-input-output-style {
+  height: 30px;
+  z-index: 5;
+}
+
+.importing-exporting-div {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -200px;
+  background-color: white;
+  text-align: right;
+  z-index: 7;
+}
+
+.importing-exporting-textarea {
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+}
