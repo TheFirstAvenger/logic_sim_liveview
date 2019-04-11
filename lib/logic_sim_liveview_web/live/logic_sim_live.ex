@@ -7,6 +7,7 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   alias LogicSim.Node.Lightbulb
   alias LogicSim.Node.OnOffSwitch
   alias LogicSim.Node.Or
+  alias LogicSimLiveview.ProcessCount
   require Logger
 
   @width 700
@@ -35,6 +36,9 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
         <%= if @select_input_for_output do %>Select an input to connect this output to<% end %>
         <%= if @select_output_for_input do %>Select an output to connect this input to<% end %>
       </div>
+
+      Server Stats:<br>Liveview Sessions: <%= @liveview_count %>, Nodes: <%= @node_count %>
+
       <div class="main-div" style="width: <%= @width %>px; height: <%= @height %>px">
       <%= for node <- @nodes do %>
         <%= render_node(node, assigns) %>
@@ -59,7 +63,7 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
         </div>
       <% end %>
       </div>
-      <br><br><br>
+      <br><br><br><br>
     </div>
     """
   end
@@ -67,11 +71,17 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   @spec render_buttons(any()) :: [Phoenix.LiveView.Rendered.t()]
   def render_buttons(assigns) do
     [
-      render_button("add_on_off_switch", "Add On/Off Switch"),
-      render_button("add_lightbulb", "Add Lightbulb"),
-      render_button("add_or", "Add Or"),
-      render_button("add_and", "Add And"),
-      render_button("add_not", "Add Not"),
+      ~E"""
+      Add Node:
+      """,
+      render_button("add_on_off_switch", "On/Off Switch"),
+      render_button("add_lightbulb", "Lightbulb"),
+      render_button("add_or", "Or"),
+      render_button("add_and", "And"),
+      render_button("add_not", "Not"),
+      ~E"""
+      &nbsp;&nbsp;&nbsp;
+      """,
       if !assigns.selection_mode && !assigns.select_for_move do
         render_button("set_select_for_move_true", "Move Node")
       end,
@@ -250,6 +260,13 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   end
 
   def mount(_session, socket) do
+    {liveview_count, node_count} =
+      if connected?(socket) do
+        ProcessCount.register_liveview(self())
+      else
+        {0, 0}
+      end
+
     socket =
       socket
       |> assign(:nodes, [])
@@ -265,8 +282,14 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
       |> assign(:image_ratios, @image_ratios)
       |> assign(:exporting, false)
       |> assign(:importing, false)
+      |> assign(:liveview_count, liveview_count)
+      |> assign(:node_count, node_count)
 
     {:ok, socket}
+  end
+
+  def handle_info({:counts, liveview_count, node_count}, socket) do
+    {:noreply, assign(socket, liveview_count: liveview_count, node_count: node_count)}
   end
 
   def handle_info({:logic_sim_node_state, from, node_state}, %{assigns: %{nodes: nodes}} = socket) do
@@ -510,19 +533,26 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   def handle_selection_mode_div_clicked(:move_node, x, y, socket) do
     %{assigns: %{nodes: nodes, selected_node: %{uuid: uuid, type: type}}} = socket
     {[node], nodes} = Enum.split_with(nodes, fn %{uuid: uuid2} -> uuid == uuid2 end)
-    node = %{node | left: x - half(@node_width), top: y - half(@image_ratios[type])}
+    node = %{node | left: x - half(@node_width), top: y - half(@node_width * @image_ratios[type] + @input_output_width)}
     {:noreply, assign(socket, nodes: [node | nodes], selected_node: nil, selection_mode: nil)}
   end
 
   def handle_selection_mode_div_clicked(:add_node, x, y, socket) do
     %{assigns: %{nodes: nodes, node_type_to_add: node_type_to_add}} = socket
-    node = create_node(node_type_to_add, x - half(@node_width), y - half(@image_ratios[node_type_to_add]))
+
+    node =
+      create_node(
+        node_type_to_add,
+        x - half(@node_width),
+        y - half(@node_width * @image_ratios[node_type_to_add] + @input_output_width)
+      )
 
     {:noreply, assign(socket, nodes: [node | nodes], selection_mode: nil)}
   end
 
   def create_node(type, x, y, uuid \\ nil) do
     node_process = type.start_link!(listeners: [self()])
+    ProcessCount.register_node(node_process)
     node_state = Node.get_state(node_process)
 
     %{

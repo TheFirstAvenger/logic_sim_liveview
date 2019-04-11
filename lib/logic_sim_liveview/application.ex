@@ -11,9 +11,9 @@ defmodule LogicSimLiveview.Application do
       # Start the Ecto repository
       LogicSimLiveview.Repo,
       # Start the endpoint when the application starts
-      LogicSimLiveviewWeb.Endpoint
+      LogicSimLiveviewWeb.Endpoint,
       # Starts a worker by calling: LogicSimLiveview.Worker.start_link(arg)
-      # {LogicSimLiveview.Worker, arg},
+      {LogicSimLiveview.ProcessCount, :ok}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
