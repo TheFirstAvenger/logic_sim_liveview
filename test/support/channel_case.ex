@@ -25,12 +25,12 @@ defmodule LogicSimLiveviewWeb.ChannelCase do
     end
   end
 
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(LogicSimLiveview.Repo)
+  setup _tags do
+    # :ok = Ecto.Adapters.SQL.Sandbox.checkout(LogicSimLiveview.Repo)
 
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(LogicSimLiveview.Repo, {:shared, self()})
-    end
+    # unless tags[:async] do
+    #   Ecto.Adapters.SQL.Sandbox.mode(LogicSimLiveview.Repo, {:shared, self()})
+    # end
 
     :ok
   end

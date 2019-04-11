@@ -10,9 +10,9 @@ config :logic_sim_liveview, LogicSimLiveviewWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :logic_sim_liveview, LogicSimLiveview.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "logic_sim_liveview_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+# config :logic_sim_liveview, LogicSimLiveview.Repo,
+#   username: "postgres",
+#   password: "postgres",
+#   database: "logic_sim_liveview_test",
+#   hostname: "localhost",
+#   pool: Ecto.Adapters.SQL.Sandbox

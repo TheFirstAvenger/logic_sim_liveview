@@ -9,7 +9,7 @@ defmodule LogicSimLiveview.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      LogicSimLiveview.Repo,
+      # LogicSimLiveview.Repo,
       # Start the endpoint when the application starts
       LogicSimLiveviewWeb.Endpoint,
       # Starts a worker by calling: LogicSimLiveview.Worker.start_link(arg)
