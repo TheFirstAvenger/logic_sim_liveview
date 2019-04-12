@@ -11,6 +11,9 @@
     <header>
       <a href="http://phoenixframework.org/">
         <img src='<%= Routes.static_path(@conn, "/images/phoenix.png") %>' alt="Phoenix Framework Logo"/>
+        <br>
+        <div class="by-liveview">Powered by <a href="https://dockyard.com/blog/2018/12/12/phoenix-liveview-interactive-real-time-apps-no-need-to-write-javascript" target="_blank">Phoenix LiveView</a></div>
+        <br><br>
       </a>
     </header>
     <main role="main" class="container">
