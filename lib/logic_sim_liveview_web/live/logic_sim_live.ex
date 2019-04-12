@@ -5,6 +5,7 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   alias LogicSim.Node
   alias LogicSim.Node.And
   alias LogicSim.Node.Lightbulb
+  alias LogicSim.Node.Not
   alias LogicSim.Node.OnOffSwitch
   alias LogicSim.Node.Or
   alias LogicSimLiveview.ProcessCount
@@ -20,11 +21,13 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
                 |> Map.put(Or, 2.0)
                 |> Map.put(Lightbulb, 1.42)
                 |> Map.put(And, 1.67)
+                |> Map.put(Not, 1.85)
   @allowed_import_type_strs [
                               OnOffSwitch,
                               Lightbulb,
                               And,
-                              Or
+                              Or,
+                              Not
                             ]
                             |> Enum.map(&Atom.to_string/1)
 
@@ -144,6 +147,12 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   def do_render_node(%{type: And}, assigns) do
     ~E"""
     <img src="/images/nodes/and.png" style="width: <%= @node_width %>px; height: <%= trunc(@node_width * @image_ratios[And]) %>px">
+    """
+  end
+
+  def do_render_node(%{type: Not}, assigns) do
+    ~E"""
+    <img src="/images/nodes/not.png" style="width: <%= @node_width %>px; height: <%= trunc(@node_width * @image_ratios[Not]) %>px">
     """
   end
 
@@ -529,6 +538,7 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   def node_type_from_string("lightbulb"), do: Lightbulb
   def node_type_from_string("or"), do: Or
   def node_type_from_string("and"), do: And
+  def node_type_from_string("not"), do: Not
 
   def handle_selection_mode_div_clicked(:move_node, x, y, socket) do
     %{assigns: %{nodes: nodes, selected_node: %{uuid: uuid, type: type}}} = socket
