@@ -370,39 +370,19 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
   def handle_event(
         "node_input_clicked_" <> uuid_and_input,
         _,
-        %{assigns: %{nodes: nodes, select_input_for_output: {output_uuid, output_output}}} = socket
+        %{assigns: %{select_input_for_output: {output_uuid, output_output}}} = socket
       ) do
     [input_uuid, input_input] = String.split(uuid_and_input, "_")
-    %{node_process: input_node_process} = get_node_by_uuid(nodes, input_uuid)
-    %{node_process: output_node_process} = get_node_by_uuid(nodes, output_uuid)
-
-    Node.link_output_to_node(
-      output_node_process,
-      String.to_existing_atom(output_output),
-      input_node_process,
-      String.to_existing_atom(input_input)
-    )
-
-    {:noreply, assign(socket, select_input_for_output: nil)}
+    connect_nodes(socket, output_uuid, output_output, input_uuid, input_input)
   end
 
   def handle_event(
         "node_output_clicked_" <> uuid_and_output,
         _,
-        %{assigns: %{nodes: nodes, select_output_for_input: {input_uuid, input_input}}} = socket
+        %{assigns: %{select_output_for_input: {input_uuid, input_input}}} = socket
       ) do
     [output_uuid, output_output] = String.split(uuid_and_output, "_")
-    %{node_process: input_node_process} = get_node_by_uuid(nodes, input_uuid)
-    %{node_process: output_node_process} = get_node_by_uuid(nodes, output_uuid)
-
-    Node.link_output_to_node(
-      output_node_process,
-      String.to_existing_atom(output_output),
-      input_node_process,
-      String.to_existing_atom(input_input)
-    )
-
-    {:noreply, assign(socket, select_output_for_input: nil)}
+    connect_nodes(socket, output_uuid, output_output, input_uuid, input_input)
   end
 
   def handle_event("node_input_clicked_" <> uuid_and_input, _, socket) do
@@ -468,6 +448,20 @@ defmodule LogicSimLiveviewWeb.LogicSimLive do
     |> Enum.each(&link_output_nodes(&1, new_nodes))
 
     {:noreply, assign(socket, nodes: new_nodes ++ nodes, importing: false)}
+  end
+
+  defp connect_nodes(%{nodes: nodes} = socket, output_uuid, output_output, input_uuid, input_input) do
+    %{node_process: input_node_process} = get_node_by_uuid(nodes, input_uuid)
+    %{node_process: output_node_process} = get_node_by_uuid(nodes, output_uuid)
+
+    Node.link_output_to_node(
+      output_node_process,
+      String.to_existing_atom(output_output),
+      input_node_process,
+      String.to_existing_atom(input_input)
+    )
+
+    {:noreply, assign(socket, select_output_for_input: nil, select_input_for_output: nil)}
   end
 
   def link_output_nodes({%{uuid: output_uuid}, output_nodes}, nodes) do

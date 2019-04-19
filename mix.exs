@@ -41,7 +41,7 @@ defmodule LogicSimLiveview.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
-      {:logic_sim, "~> 0.1.2"},
+      {:logic_sim, "~> 0.1.4"},
       {:uuid, "~> 1.1"}
     ]
   end
@@ -53,11 +53,6 @@ defmodule LogicSimLiveview.MixProject do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "npm.install": ["cmd 'npm install --prefix assets'"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
-    ]
+    []
   end
 end
