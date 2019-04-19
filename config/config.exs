@@ -7,8 +7,8 @@
 # General application configuration
 use Mix.Config
 
-config :logic_sim_liveview,
-  ecto_repos: [LogicSimLiveview.Repo]
+# config :logic_sim_liveview,
+#   ecto_repos: [LogicSimLiveview.Repo]
 
 # Configures the endpoint
 config :logic_sim_liveview, LogicSimLiveviewWeb.Endpoint,

@@ -68,9 +68,9 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
-config :logic_sim_liveview, LogicSimLiveview.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "logic_sim_liveview_dev",
-  hostname: "localhost",
-  pool_size: 10
+# config :logic_sim_liveview, LogicSimLiveview.Repo,
+#   username: "postgres",
+#   password: "postgres",
+#   database: "logic_sim_liveview_dev",
+#   hostname: "localhost",
+#   pool_size: 10
